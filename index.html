@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Answer Finder</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #answer { margin-top: 20px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Question Answer Finder</h1>
+    <form id="search-form">
+        <input type="text" id="query" name="query" placeholder="Enter your question" required>
+        <button type="submit">Search</button>
+    </form>
+    <div id="answer"></div>
+
+    <script>
+        document.getElementById('search-form').onsubmit = async function (event) {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            const response = await fetch('/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `query=${encodeURIComponent(query)}`
+            });
+            const data = await response.json();
+            const answerDiv = document.getElementById('answer');
+            answerDiv.innerHTML = data.answers.join('<br>');
+        }
+    </script>
+</body>
+</html>
